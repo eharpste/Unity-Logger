@@ -6,10 +6,6 @@ using System.Collections.Generic;
 /// <summary>
 /// The singleton logger class used to log game play for follow-up analysis.
 /// </summary>
-/// <remarks>
-/// Change History:
-/// 2012/10/31: Created a generalized version of the Logger that has non-RumbleBlocks related methods.
-/// </remarks>
 public class Logger {
 	#region ==============================|   Singleton Implementation   |==============================
 	/// <summary>
@@ -341,6 +337,16 @@ public class Logger {
 	}
 	
 	/// <summary>
+	/// Records the start of a new level.  If there was a logged level before,
+	/// closes it out first. Use of the string based LevelStart is highly recommended for log 
+	/// clarity, however, the level's index may also be used.
+	/// </summary>
+	/// <param name="level">The index of the level being started.</param>
+	public void LevelStart(int level) {
+		LevelStart(level.ToString());
+	}
+	
+	/// <summary>
 	/// Records the restart of a level by the user.
 	/// </summary>
 	/// <param name="level">The level being restarted.</param>
@@ -474,22 +480,6 @@ public class Logger {
 	}
 	
 	/// <summary>
-	/// Writes the sequence load ID (how levels are ordered to the user), which
-	/// comes from the caller.  Before doing so, closes out any prior session
-	/// and starts a new one that will be associated with this sequence info.
-	/// </summary>
-	/// <param name='sequenceInfo'>
-	/// Sequence information clear enough to distinguish different sequence options.
-	/// </param>
-	public void SessionSequenceLoaded(string sequenceInfo) {
-		if (!this.Enabled) return;
-		
-		SessionStart(); // start new session first
-		
-		this.write("System", "Session_SequenceLoaded", sequenceInfo);
-	}
-	
-	/// <summary>
 	/// Sets the demographics, logging them if we are InSession. 
 	/// If not InSession, they are cached and logged when InSession is set to true.
 	/// </summary>
@@ -511,7 +501,7 @@ public class Logger {
 	/// session will always have information on sequence loading, and will have
 	/// nothing else prior to sequence loading.  Also ends any existing session first
 	/// before starting a new session.</remarks>
-	private void SessionStart() {
+	public void SessionStart() {
 		if (!this.Enabled) return;
 
 		if (this.InSession)
@@ -568,7 +558,7 @@ public class Logger {
 	public void ClearLoggableObjects() {
 		if(!this.Enabled) return;
 		
-		LoggableObjects = new List<GameObject>();
+		LoggableObjects.Clear();
 	}
 	
 	/// <summary>
