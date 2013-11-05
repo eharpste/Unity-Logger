@@ -1,5 +1,3 @@
-//#define NON_RUMBLEBLOCKS
-#if NON_RUMBLEBLOCKS
 using UnityEngine;
 using System;
 using System.Collections;
@@ -681,5 +679,3 @@ public class Logger {
 		this.write("System",START_STATE,startState);
 	}
 }
-
-#endif
